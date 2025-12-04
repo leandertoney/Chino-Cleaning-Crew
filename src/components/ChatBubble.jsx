@@ -37,7 +37,7 @@ function ChatBubble() {
     "quote-warehouse": "Perfect—warehouses are our specialty. Fill out our quick form and we'll get back to you within 24 hours with a free quote.",
     "quote-office": "We handle offices of all sizes. Fill out our quick form and we'll get back to you within 24 hours.",
     "quote-other": "No problem—we clean it all. Fill out our form and tell us about your space. We'll figure it out together.",
-    services: "We clean everything: warehouses, offices, retail spaces, construction sites, and more. Power washing, floor care, deep cleans—you name it, we handle it.",
+    services: "We clean everything: warehouses, offices, retail spaces, construction sites—even emergency cleanups. Power washing, floor care, deep cleans—you name it, we handle it.",
     areas: "We serve Cumberland, Dauphin, York, Lancaster, Perry, Adams, Franklin, Lebanon, Juniata, and Mifflin counties in Central PA.",
     "outside-area": "Don't worry—we never say no. Give us a call and let's talk about your project.",
     call: "Call us anytime at 717-714-0662. We're happy to chat!",

@@ -21,6 +21,7 @@ function Navigation() {
     'Floor Buffing & Stripping',
     'Wall Deep-Cleans',
     'Post-Construction Cleanup',
+    'Emergency Cleaning',
     'Scheduled Maintenance',
   ]
 
