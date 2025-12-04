@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <!-- Background -->
+  <rect width="48" height="48" rx="10" fill="#001F3F"/>
+  <!-- Three concentric C's - all centered at (24,24), same 60° opening, equal 6-unit gaps -->
+  <!-- Outer C - radius 20 -->
+  <path d="M34 6.72 A20 20 0 1 0 34 41.28" stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- Middle C - radius 14 -->
+  <path d="M31 11.87 A14 14 0 1 0 31 36.13" stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- Inner C - radius 8 -->
+  <path d="M28 17.07 A8 8 0 1 0 28 30.93" stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- Precise 5-point star - R=3.5, r=1.4, centered at (24,24) -->
+  <path d="M24 20.5 L24.82 22.87 L27.33 22.92 L25.33 24.43 L26.06 26.83 L24 25.4 L21.94 26.83 L22.67 24.43 L20.67 22.92 L23.18 22.87 Z" fill="white"/>
+</svg>
