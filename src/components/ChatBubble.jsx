@@ -2,19 +2,91 @@ import { useState } from 'react'
 
 function ChatBubble() {
   const [isOpen, setIsOpen] = useState(false)
-  const [currentMessage, setCurrentMessage] = useState(0)
+  const [conversation, setConversation] = useState([
+    { type: 'bot', text: "Hey! What can we help you with today?" }
+  ])
 
-  const messages = [
-    'How can we help you today?',
-    'Need a quote? Tell us about your space—any size, any type.',
-    'Warehouses, offices, retail, construction sites—we clean it all. Power washing, floor care, deep cleans, and more.',
-    'Serving Cumberland, Dauphin, York, Lancaster, and all surrounding counties.',
-    'Call 717-714-0662 — no job too big, no space too small.',
-  ]
-
-  const handleNextMessage = () => {
-    setCurrentMessage((prev) => (prev + 1) % messages.length)
+  const quickReplies = {
+    initial: [
+      { label: "I need a quote", action: "quote" },
+      { label: "What do you clean?", action: "services" },
+      { label: "Where do you service?", action: "areas" },
+      { label: "Call now", action: "call" },
+    ],
+    quote: [
+      { label: "Warehouse / Industrial", action: "quote-warehouse" },
+      { label: "Office / Commercial", action: "quote-office" },
+      { label: "Something else", action: "quote-other" },
+    ],
+    services: [
+      { label: "Get a quote", action: "quote" },
+      { label: "Where do you service?", action: "areas" },
+      { label: "Call to discuss", action: "call" },
+    ],
+    areas: [
+      { label: "I'm in your area!", action: "quote" },
+      { label: "I'm outside these areas", action: "outside-area" },
+    ],
+    final: [
+      { label: "Start over", action: "reset" },
+    ],
   }
+
+  const responses = {
+    quote: "Great! What type of space do you need cleaned?",
+    "quote-warehouse": "Perfect—warehouses are our specialty. Fill out our quick form and we'll get back to you within 24 hours with a free quote.",
+    "quote-office": "We handle offices of all sizes. Fill out our quick form and we'll get back to you within 24 hours.",
+    "quote-other": "No problem—we clean it all. Fill out our form and tell us about your space. We'll figure it out together.",
+    services: "We clean everything: warehouses, offices, retail spaces, construction sites, and more. Power washing, floor care, deep cleans—you name it, we handle it.",
+    areas: "We serve Cumberland, Dauphin, York, Lancaster, Perry, Adams, Franklin, Lebanon, Juniata, and Mifflin counties in Central PA.",
+    "outside-area": "Don't worry—we never say no. Give us a call and let's talk about your project.",
+    call: "Call us anytime at 717-714-0662. We're happy to chat!",
+  }
+
+  const getNextReplies = (action) => {
+    if (action === "reset") return "initial"
+    if (action === "quote") return "quote"
+    if (action === "services") return "services"
+    if (action === "areas") return "areas"
+    if (action.startsWith("quote-") || action === "outside-area" || action === "call") return "final"
+    return "initial"
+  }
+
+  const handleReply = (reply) => {
+    if (reply.action === "reset") {
+      setConversation([{ type: 'bot', text: "Hey! What can we help you with today?" }])
+      return
+    }
+
+    if (reply.action === "call") {
+      window.location.href = "tel:717-714-0662"
+      return
+    }
+
+    const userMessage = { type: 'user', text: reply.label }
+    const botResponse = { type: 'bot', text: responses[reply.action] }
+
+    setConversation(prev => [...prev, userMessage, botResponse])
+  }
+
+  const getCurrentReplies = () => {
+    if (conversation.length === 1) return quickReplies.initial
+
+    const lastBotMessage = [...conversation].reverse().find(m => m.type === 'bot')
+
+    for (const [action, response] of Object.entries(responses)) {
+      if (lastBotMessage?.text === response) {
+        return quickReplies[getNextReplies(action)] || quickReplies.final
+      }
+    }
+
+    return quickReplies.initial
+  }
+
+  const currentReplies = getCurrentReplies()
+  const showQuoteButton = conversation.some(m =>
+    m.text?.includes("Fill out") || m.text?.includes("form")
+  )
 
   return (
     <>
@@ -66,15 +138,13 @@ function ChatBubble() {
         }`}
       >
         {/* Header */}
-        <div className="bg-navy p-5">
-          <div className="flex items-center gap-3">
+        <div className="bg-navy p-4">
+          <div className="flex items-center gap-0">
             <svg
-              className="w-10 h-10"
-              viewBox="0 0 48 48"
+              className="w-9 h-9"
+              viewBox="0 0 36 48"
               fill="none"
             >
-              {/* Three concentric C's - all centered at (24,24), same 60° opening, equal 6-unit gaps */}
-              {/* Outer C - radius 20 */}
               <path
                 d="M34 6.72 A20 20 0 1 0 34 41.28"
                 stroke="white"
@@ -82,7 +152,6 @@ function ChatBubble() {
                 strokeLinecap="round"
                 fill="none"
               />
-              {/* Middle C - radius 14 */}
               <path
                 d="M31 11.87 A14 14 0 1 0 31 36.13"
                 stroke="white"
@@ -90,7 +159,6 @@ function ChatBubble() {
                 strokeLinecap="round"
                 fill="none"
               />
-              {/* Inner C - radius 8 */}
               <path
                 d="M28 17.07 A8 8 0 1 0 28 30.93"
                 stroke="white"
@@ -98,53 +166,63 @@ function ChatBubble() {
                 strokeLinecap="round"
                 fill="none"
               />
-              {/* Precise 5-point star - R=3.5, r=1.4, centered at (24,24) */}
               <path
                 d="M24 20.5 L24.82 22.87 L27.33 22.92 L25.33 24.43 L26.06 26.83 L24 25.4 L21.94 26.83 L22.67 24.43 L20.67 22.92 L23.18 22.87 Z"
                 fill="white"
               />
             </svg>
-            <span className="text-white font-bold text-sm tracking-tight">
-              Chino Cleaning Crew
-            </span>
+            <div>
+              <span className="text-white font-bold text-sm block">Chino Cleaning Crew</span>
+              <span className="text-white/70 text-xs">Usually replies instantly</span>
+            </div>
           </div>
         </div>
 
         {/* Messages */}
-        <div className="p-5 min-h-[200px] bg-steel-gray/10">
-          <div className="bg-white p-4 shadow-sm mb-4">
-            <p className="text-navy font-medium">{messages[currentMessage]}</p>
-          </div>
-
-          {/* Quick Actions */}
-          <div className="space-y-2">
-            <button
-              onClick={handleNextMessage}
-              className="w-full text-left bg-white p-3 text-sm text-navy hover:bg-steel-gray/10 transition-colors duration-200 border border-steel-gray/20"
-            >
-              Tell me more
-            </button>
-            <a
-              href="#contact"
-              onClick={() => setIsOpen(false)}
-              className="block w-full text-left bg-white p-3 text-sm text-navy hover:bg-steel-gray/10 transition-colors duration-200 border border-steel-gray/20"
-            >
-              Get a quote
-            </a>
-            <a
-              href="tel:717-714-0662"
-              className="block w-full text-left bg-white p-3 text-sm text-navy hover:bg-steel-gray/10 transition-colors duration-200 border border-steel-gray/20"
-            >
-              Call 717-714-0662
-            </a>
+        <div className="p-4 max-h-64 overflow-y-auto bg-steel-gray/5">
+          <div className="space-y-3">
+            {conversation.map((message, index) => (
+              <div
+                key={index}
+                className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                <div
+                  className={`max-w-[80%] p-3 text-sm ${
+                    message.type === 'user'
+                      ? 'bg-navy text-white rounded-t-lg rounded-bl-lg'
+                      : 'bg-white text-navy shadow-sm rounded-t-lg rounded-br-lg'
+                  }`}
+                >
+                  {message.text}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="p-4 border-t border-steel-gray/20 bg-white">
-          <p className="text-xs text-steel-gray text-center">
-            Powered by Chino Cleaning Crew
-          </p>
+        {/* Quick Replies */}
+        <div className="p-4 border-t border-steel-gray/10 bg-white">
+          <div className="flex flex-wrap gap-2">
+            {currentReplies.map((reply, index) => (
+              <button
+                key={index}
+                onClick={() => handleReply(reply)}
+                className="px-3 py-2 text-sm bg-steel-gray/10 text-navy rounded-full hover:bg-navy hover:text-white transition-colors duration-200"
+              >
+                {reply.label}
+              </button>
+            ))}
+          </div>
+
+          {showQuoteButton && (
+            <a
+              href="#contact"
+              onClick={() => setIsOpen(false)}
+              className="block w-full mt-3 py-3 bg-navy text-white text-center text-sm font-bold hover:bg-navy/90 transition-colors duration-200"
+            >
+              Get Your Free Quote
+            </a>
+          )}
         </div>
       </div>
     </>

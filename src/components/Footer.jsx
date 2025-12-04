@@ -33,10 +33,10 @@ function Footer() {
         <div className="grid md:grid-cols-3 gap-12 md:gap-8 mb-12">
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-3 mb-6">
+            <div className="flex items-center gap-0 mb-6">
               <svg
                 className="w-14 h-14"
-                viewBox="0 0 48 48"
+                viewBox="0 0 36 48"
                 fill="none"
               >
                 {/* Three concentric C's - all centered at (24,24), same 60° opening, equal 6-unit gaps */}

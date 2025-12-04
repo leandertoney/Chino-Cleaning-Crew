@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import VoiceAgent from './VoiceAgent'
 
 function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -64,11 +65,11 @@ function Navigation() {
           <a
             href="#home"
             onClick={(e) => handleNavClick(e, '#home')}
-            className="flex items-center gap-3 group"
+            className="flex items-center gap-0 group"
           >
             <svg
               className="w-11 h-11 transition-transform duration-200 group-hover:scale-105"
-              viewBox="0 0 48 48"
+              viewBox="0 0 36 48"
               fill="none"
             >
               {/* Three concentric C's - all centered at (24,24), same 60° opening, equal 6-unit gaps */}
@@ -193,6 +194,11 @@ function Navigation() {
               >
                 Contact
               </a>
+            </li>
+
+            {/* Voice Agent CTA */}
+            <li>
+              <VoiceAgent inNavbar={true} />
             </li>
           </ul>
 
@@ -319,6 +325,11 @@ function Navigation() {
               >
                 Contact
               </a>
+            </li>
+
+            {/* Voice Agent CTA */}
+            <li className="pt-4">
+              <VoiceAgent inNavbar={true} />
             </li>
           </ul>
         </div>
